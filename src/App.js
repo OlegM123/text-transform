@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 function App() {
-  
+
   const msgLimit = 140;
   const [text, setText] = useState('');
   const [result, setResult] = useState([]);
@@ -22,7 +22,7 @@ function App() {
       let offset = 0; // offset
       let fragmentCounter = 1; // fragments counter
 
-      while (fragmentCounter <= countOfFragments) {
+      while (workText[offset] !== undefined) {
 
         let item = '';
 
@@ -42,7 +42,7 @@ function App() {
         fragmentCounter++;
 
       }
-      setResult(resArr);
+      setResult(resArr.map(item => { return item.substring(0, item.length - 1) + `${fragmentCounter - 1}` }));
     } else {
       setResult([text]);
     }

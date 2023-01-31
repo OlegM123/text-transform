@@ -30,8 +30,6 @@ function App() {
           workText[offset] !== undefined && // that means end of initial array
           (item.length + workText[offset].length + countOfFragments.toString().length + fragmentCounter.toString().length + 2) <= msgLimit // that checks if result item length will less than 140 after adding suffix 
         ) {
-          console.log('inner cycle')
-
           // ^ sum of length of current fragment, current word that we want to add, number of current dragment, number of count of fragments and symbols " /" 
           item += workText[offset] + ' ';
           i = item.length;
@@ -54,7 +52,7 @@ function App() {
     <AppDiv>
       inter limit:
       <br />
-      <input type="number" onChange={(e) => setMsgLimit(e.target.value)}/>
+      <input type="number" onChange={(e) => setMsgLimit(e.target.value)} />
       <br />
       input text:
       <StyledInput onChange={(e) => setText(e.target.value)}>

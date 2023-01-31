@@ -50,7 +50,7 @@ function App() {
 
   return (
     <AppDiv>
-      inter limit:
+      enter limit:
       <br />
       <input type="number" onChange={(e) => setMsgLimit(e.target.value)} />
       <br />

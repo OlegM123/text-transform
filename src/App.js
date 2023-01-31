@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 function App() {
 
-  const msgLimit = 140;
+  const [msgLimit, setMsgLimit] = useState(140);
   const [text, setText] = useState('');
   const [result, setResult] = useState([]);
   const [workText, setWorkText] = useState([]);
@@ -23,14 +23,15 @@ function App() {
       let fragmentCounter = 1; // fragments counter
 
       while (workText[offset] !== undefined) {
-
         let item = '';
 
         while (
-          i < 140 &&
+          i < msgLimit &&
           workText[offset] !== undefined && // that means end of initial array
-          (item.length + workText[offset].length + countOfFragments.toString().length + fragmentCounter.toString().length + 2) <= 140 // that checks if result item length will less than 140 after adding suffix 
+          (item.length + workText[offset].length + countOfFragments.toString().length + fragmentCounter.toString().length + 2) <= msgLimit // that checks if result item length will less than 140 after adding suffix 
         ) {
+          console.log('inner cycle')
+
           // ^ sum of length of current fragment, current word that we want to add, number of current dragment, number of count of fragments and symbols " /" 
           item += workText[offset] + ' ';
           i = item.length;
@@ -42,7 +43,7 @@ function App() {
         fragmentCounter++;
 
       }
-      setResult(resArr.map(item => { return item.substring(0, item.length - 1) + `${fragmentCounter - 1}` }));
+      setResult(resArr.map(item => { return item.substring(0, item.length - fragmentCounter.toString().length) + `${fragmentCounter - 1}` }));
     } else {
       setResult([text]);
     }
@@ -51,6 +52,10 @@ function App() {
 
   return (
     <AppDiv>
+      inter limit:
+      <br />
+      <input type="number" onChange={(e) => setMsgLimit(e.target.value)}/>
+      <br />
       input text:
       <StyledInput onChange={(e) => setText(e.target.value)}>
       </StyledInput>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import textTransform from "./TextTransform";
 
 function App() {
 
@@ -8,9 +9,9 @@ function App() {
   const [text, setText] = useState('');
   const [result, setResult] = useState([]);
   const [workText, setWorkText] = useState([]);
-  const countOfFragments = workText.join().length > msgLimit ? 
-  Math.ceil((text.length + ((Math.ceil(text.length / msgLimit).toString().length * 2) + 3) * Math.ceil(text.length / msgLimit)) / msgLimit) 
-  : 1;
+  const countOfFragments = workText.join().length > msgLimit ?
+    Math.ceil((text.length + ((Math.ceil(text.length / msgLimit).toString().length * 2) + 3) * Math.ceil(text.length / msgLimit)) / msgLimit)
+    : 1;
 
   useEffect(() => {
     setWorkText(() => text.split(' ')); // text splitted by ' ' symbol  
@@ -23,40 +24,6 @@ function App() {
     );
   }, [workText, countOfFragments]);
 
-  const handleClick = () => {
-
-    if (text.length > msgLimit) { //if text lenght less or equals 140 we just push it as a result
-
-      const resArr = []; //result
-      let i = workText[0].length; // length of current fragment counter
-      let offset = 0; // offset
-      let fragmentCounter = 1; // fragments counter
-
-      while (workText[offset] !== undefined) {
-        let item = '';
-
-        while (
-          i < msgLimit &&
-          workText[offset] !== undefined && // that means end of initial array
-          (item.length + workText[offset].length + countOfFragments.toString().length + fragmentCounter.toString().length + 2) <= msgLimit // that checks if result item length will less than 140 after adding suffix 
-        ) {
-          // ^ sum of length of current fragment, current word that we want to add, number of current dragment, number of count of fragments and symbols " /" 
-          item += workText[offset] + ' ';
-          i = item.length;
-          offset++;
-        }
-
-        i = 0;
-        resArr.push(item + fragmentCounter + '/' + countOfFragments);
-        fragmentCounter++;
-
-      }
-      setResult(resArr.map(item => { return item.substring(0, item.length - fragmentCounter.toString().length) + `${fragmentCounter - 1}` }));
-    } else {
-      setResult([text]);
-    }
-  }
-
   return (
     <AppDiv>
       Enter the limit:
@@ -67,21 +34,23 @@ function App() {
       <StyledInput onChange={(e) => setText(e.target.value.trim())}>
       </StyledInput>
       <StyledButton
-        onClick={handleClick}
+        onClick={() => setResult(textTransform(text, msgLimit))}
         disabled={minMsgLimit > msgLimit || text.trim() === ''}
       >
         RUN
       </StyledButton>
       <br />
-      {minMsgLimit > msgLimit && 'Message limit is too small'}
-      {!!result.length && result.map((item, index) => {
-        return (
-          <ResultItem key={index}>
-            {item}
-          </ResultItem>
-        )
-      })}
-    </AppDiv>
+      { minMsgLimit > msgLimit && 'Message limit is too small' }
+  {
+    !!result.length && result.map((item, index) => {
+      return (
+        <ResultItem key={index}>
+          {item}
+        </ResultItem>
+      )
+    })
+  }
+    </AppDiv >
   );
 }
 

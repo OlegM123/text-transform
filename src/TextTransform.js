@@ -26,11 +26,11 @@ const textTransform = (text, msgLimit) => {
             }
 
             i = 0;
-            resArr.push(item + fragmentCounter + '/' + countOfFragments);
+            resArr.push(item + fragmentCounter + '/');
             fragmentCounter++;
 
         }
-        return (resArr.map(item => { return item.substring(0, item.length - fragmentCounter.toString().length) + `${fragmentCounter - 1}` }));
+        return (resArr.map(item => item + `${fragmentCounter - 1}`));
     } else {
         return ([text]);
     }

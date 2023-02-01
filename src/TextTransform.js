@@ -5,7 +5,7 @@ const textTransform = (text, msgLimit) => {
         Math.ceil((text.length + ((Math.ceil(text.length / msgLimit).toString().length * 2) + 3) * Math.ceil(text.length / msgLimit)) / msgLimit)
         : 1;
     const resArr = []; //result
-    let i = workText[0].length; // length of current fragment counter
+    let fragmentLengthCounter = workText[0].length; // length of current fragment counter
     let offset = 0; // offset
     let fragmentCounter = 1; // fragments counter
 
@@ -15,17 +15,17 @@ const textTransform = (text, msgLimit) => {
             let item = '';
 
             while (
-                i < msgLimit &&
+                fragmentLengthCounter < msgLimit &&
                 workText[offset] !== undefined && // that means end of initial array
                 (item.length + workText[offset].length + countOfFragments.toString().length + fragmentCounter.toString().length + 2) <= msgLimit // that checks if result item length will less than 140 after adding suffix 
             ) {
                 // ^ sum of length of current fragment, current word that we want to add, number of current dragment, number of count of fragments and symbols " /" 
                 item += workText[offset] + ' ';
-                i = item.length;
+                fragmentLengthCounter = item.length;
                 offset++;
             }
 
-            i = 0;
+            fragmentLengthCounter = 0;
             resArr.push(item + fragmentCounter + '/');
             fragmentCounter++;
 

@@ -4,19 +4,29 @@ import styled from "styled-components";
 function App() {
 
   const [msgLimit, setMsgLimit] = useState(140);
+  const [minMsgLimit, setMinMsgLimit] = useState(0);
   const [text, setText] = useState('');
   const [result, setResult] = useState([]);
   const [workText, setWorkText] = useState([]);
+  const countOfFragments = workText.join().length > msgLimit ? 
+  Math.ceil((text.length + ((Math.ceil(text.length / msgLimit).toString().length * 2) + 3) * Math.ceil(text.length / msgLimit)) / msgLimit) 
+  : 1;
 
   useEffect(() => {
-    setWorkText(() => text.split(' ')); // text splitted by ' ' symbol   
-  }, [text])
+    setWorkText(() => text.split(' ')); // text splitted by ' ' symbol  
+    setResult([]);
+  }, [text]);
+
+  useEffect(() => {
+    setMinMsgLimit(
+      workText?.reduce((max, item) => max.length > item.length ? max : item, '').length + (countOfFragments > 1 ? (countOfFragments.toString().length) * 2 + 2 : 0)
+    );
+  }, [workText, countOfFragments]);
 
   const handleClick = () => {
 
     if (text.length > msgLimit) { //if text lenght less or equals 140 we just push it as a result
 
-      const countOfFragments = Math.ceil((text.length + ((Math.ceil(text.length / msgLimit).toString().length * 2) + 3) * Math.ceil(text.length / msgLimit)) / msgLimit)
       const resArr = []; //result
       let i = workText[0].length; // length of current fragment counter
       let offset = 0; // offset
@@ -45,23 +55,26 @@ function App() {
     } else {
       setResult([text]);
     }
-
   }
 
   return (
     <AppDiv>
-      inter limit:
+      Enter the limit:
       <br />
-      <input type="number" onChange={(e) => setMsgLimit(e.target.value)} />
+      <input type="number" onChange={(e) => setMsgLimit(e.target.value.trim())} value={msgLimit} />
       <br />
-      input text:
-      <StyledInput onChange={(e) => setText(e.target.value)}>
+      Enter the text:
+      <StyledInput onChange={(e) => setText(e.target.value.trim())}>
       </StyledInput>
-      <StyledButton onClick={handleClick}>
-        run
+      <StyledButton
+        onClick={handleClick}
+        disabled={minMsgLimit > msgLimit || text.trim() === ''}
+      >
+        RUN
       </StyledButton>
       <br />
-      result: {result.map((item, index) => {
+      {minMsgLimit > msgLimit && 'Message limit is too small'}
+      {!!result.length && result.map((item, index) => {
         return (
           <ResultItem key={index}>
             {item}
@@ -88,8 +101,8 @@ const AppDiv = styled.div`
 
 const StyledButton = styled.button`
   margin: 10px auto;
-  height: 40px;
-  width: 100px;
+  height: 30px;
+  width: 70px;
   border-radius: 10px;
 `
 

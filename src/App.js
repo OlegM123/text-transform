@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import textTransform from "./TextTransform";
+import textTransform from "./TextTransform.ts";
 
 function App() {
 

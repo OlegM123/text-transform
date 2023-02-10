@@ -1,13 +1,13 @@
-const textTransform = (text, msgLimit) => {
+const textTransform = (text: string, msgLimit: number) => {
 
-    const workText = text.split(' ');
-    const countOfFragments = workText.join().length > msgLimit ?
+    const workText: string[] = text.split(' ');
+    const countOfFragments: number = workText.join().length > msgLimit ?
         Math.ceil((text.length + ((Math.ceil(text.length / msgLimit).toString().length * 2) + 3) * Math.ceil(text.length / msgLimit)) / msgLimit)
         : 1;
-    const resArr = []; //result
-    let fragmentLengthCounter = workText[0].length; // length of current fragment counter
-    let offset = 0; // offset
-    let fragmentCounter = 1; // fragments counter
+    const resArr: string[] = []; //result
+    let fragmentLengthCounter: number = workText[0].length; // length of current fragment counter
+    let offset: number = 0; // offset
+    let fragmentCounter: number = 1; // fragments counter
 
     if (text.length > msgLimit) { //if text lenght less or equals 140 we just push it as a result
 
